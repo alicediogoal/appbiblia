@@ -2,12 +2,13 @@ name: Gerar APK
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    paths: ['mana-android.zip']
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: unzip -q mana-android.zip
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -16,19 +17,27 @@ jobs:
           distribution: temurin
           java-version: 21
       - run: npm install
+        working-directory: mana-android
       - run: npx cap add android
-      - name: Ícone e permissões
-        run: |
+        working-directory: mana-android
+      - run: |
           cp -r icons/* android/app/src/main/res/
           rm -f android/app/src/main/res/mipmap-anydpi-v26/*.xml
           sed -i 's#<application#<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n    <application#' android/app/src/main/AndroidManifest.xml
+        working-directory: mana-android
       - run: npx cap sync android
-      - name: Compilar
-        working-directory: android
+        working-directory: mana-android
+      - name: Chave fixa e versão
         run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
+        working-directory: mana-android
+      - run: |
           chmod +x gradlew
           ./gradlew assembleDebug
+        working-directory: mana-android/android
       - uses: actions/upload-artifact@v4
         with:
           name: Mana-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: mana-android/android/app/build/outputs/apk/debug/app-debug.apk
