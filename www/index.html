@@ -89,7 +89,7 @@ input[type=time]{width:auto}
 .intro summary{font-weight:600;cursor:pointer;padding:4px 0}
 .intro details p{margin:6px 0 4px}
 .esb{margin:6px 0 4px;padding-left:20px}.esb li{margin:4px 0}
-</style>
+.tl{display:flex;flex-wrap:wrap;gap:6px 14px}.tl .ref{text-align:left;padding:4px 0}</style>
 </head>
 <body>
 <main id="main"></main>
@@ -104,9 +104,12 @@ const $=s=>document.querySelector(s);
 const e=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const CH=[1,18,2,3,4,5,6,7,8,9,10,19,13,11,20,22,21,14,12,32,30,28,23,33,34,36,24,25,35,26,27,15,37,38,17,16,31,29,39,40,41,42,43,44,59,48,52,53,46,47,45,49,51,57,50,54,56,55,58,60,61,62,63,64,65,66].map(n=>n-1);
 const NTB=CH.filter(b=>b>=39),ATB=CH.filter(b=>b<39);
-const MO=[['Bíblia em 6 meses',182,CH],['Bíblia em 1 ano',365,CH],['Bíblia em 1 ano e meio',547,CH],['Bíblia em 90 dias',90,CH],['Novo Testamento em 30 dias',30,NTB],['Antigo Testamento em 90 dias',90,ATB]];
+const ERAS=[["Origens","Criação, queda, dilúvio e as nações",[[0,0,10]]],["Patriarcas","Abraão, Isaque, Jacó e José. Jó é colocado aqui, mas sua data é debatida",[[17,0,41],[0,11,49]]],["Êxodo e Lei","Libertação do Egito, aliança no Sinai e peregrinação no deserto",[[1,0,39],[2,0,26],[3,0,35],[18,89,89],[4,0,33]]],["Conquista e juízes","Entrada em Canaã e o tempo dos juízes",[[5,0,23],[6,0,20],[7,0,3]]],["Reino unido","Saul, Davi e Salomão",[[8,0,30],[9,0,23],[12,0,28],[18,2,8],[18,10,31],[18,33,40],[18,50,64],[18,67,69],[18,85,85],[18,100,100],[18,102,102],[18,107,109],[18,121,121],[18,123,123],[18,130,130],[18,132,132],[18,137,144],[10,0,10],[13,0,8],[21,0,7],[19,0,30],[20,0,11],[18,71,71],[18,126,126]]],["Reino dividido","Israel no norte e Judá no sul, com os profetas",[[10,11,21],[13,9,19],[11,0,7],[13,20,20],[11,8,10],[13,21,23],[28,0,2],[11,11,13],[13,24,24],[31,0,3],[29,0,8],[27,0,13],[13,25,26],[11,14,15],[32,0,6],[13,27,27],[11,16,16],[13,28,31],[11,17,19],[22,0,65],[18,0,1],[18,9,9],[18,32,32],[18,41,49],[18,65,66],[18,70,70],[18,72,84],[18,86,88],[11,20,20],[13,32,32],[33,0,2],[11,21,22],[13,33,34],[35,0,2],[34,0,2]]],["Queda de Judá e exílio","Jerusalém cai e o povo vive na Babilônia",[[23,0,51],[11,23,24],[13,35,35],[24,0,4],[30,0,0],[25,0,47],[26,0,11]]],["Volta do exílio","Reconstrução do templo, dos muros e da vida do povo",[[14,0,5],[36,0,1],[37,0,13],[16,0,9],[14,6,9],[15,0,12],[18,90,99],[18,101,101],[18,103,106],[18,110,120],[18,122,122],[18,124,125],[18,127,129],[18,131,131],[18,133,136],[18,145,149],[38,0,3]]],["Vida de Jesus","Os quatro Evangelhos, um após o outro",[[39,0,27],[40,0,15],[41,0,23],[42,0,20]]],["Igreja primitiva e cartas","Atos e as cartas, na ordem aproximada em que foram escritas",[[43,0,11],[58,0,4],[43,12,13],[47,0,5],[43,14,16],[51,0,4],[52,0,2],[43,17,18],[45,0,15],[43,19,19],[46,0,12],[44,0,15],[43,20,27],[50,0,3],[56,0,0],[48,0,5],[49,0,3],[53,0,5],[55,0,2],[59,0,4],[54,0,3],[60,0,2],[57,0,12],[64,0,0],[61,0,4],[62,0,0],[63,0,0]]],["Revelação","A visão final",[[65,0,21]]]];
+const CHR=[];ERAS.forEach(x=>x[2].forEach(g=>{for(let c=g[1];c<=g[2];c++)CHR.push([g[0],c])}));
+const POS={};CHR.forEach((x,i)=>{POS[x[0]+':'+x[1]]=i});
+const MO=[['Bíblia em 6 meses',182,CH],['Bíblia em 1 ano',365,CH],['Bíblia em 1 ano e meio',547,CH],['Bíblia em 90 dias',90,CH],['Novo Testamento em 30 dias',30,NTB],['Antigo Testamento em 90 dias',90,ATB],['Bíblia por acontecimentos em 1 ano',365,{seq:CHR}],['Bíblia por acontecimentos em 6 meses',182,{seq:CHR}]];
 const VD=[[0,0,26],[39,4,15],[0,27,14],[39,5,32],[1,13,13],[39,6,6],[4,30,5],[39,10,27],[5,0,8],[39,27,19],[8,15,6],[40,9,44],[18,26,0],[41,0,36],[18,33,7],[42,0,11],[18,36,3],[42,2,15],[18,45,9],[42,7,11],[18,90,0],[42,9,9],[18,120,1],[42,12,33],[18,138,13],[42,13,5],[18,22,0],[42,13,26],[18,45,0],[42,14,4],[18,118,104],[44,4,7],[19,2,4],[44,7,27],[19,15,2],[44,7,37],[19,21,5],[44,11,1],[20,2,0],[44,14,12],[22,25,2],[45,12,3],[22,40,9],[46,4,16],[22,39,30],[46,11,8],[22,42,1],[47,1,19],[22,52,4],[47,4,21],[23,28,10],[48,1,7],[24,2,22],[48,5,9],[32,5,7],[49,3,5],[35,2,16],[49,3,12],[50,2,22],[51,4,15],[54,0,6],[57,10,0],[57,3,15],[58,0,4],[59,4,6],[61,3,18],[65,20,3]];
-const D={plan:null,start:null,done:[],notes:[],saved:[],last:null,size:19,theme:'auto',rem:false,time:'07:00',nd:'',hj:true,hp:true,he:true,intro:true};
+const D={plan:null,start:null,done:[],notes:[],saved:[],last:null,size:19,theme:'auto',rem:false,time:'07:00',nd:'',hj:true,hp:true,he:true,intro:true,ord:'l'};
 let S;try{S={...D,...JSON.parse(localStorage.getItem('mana')||'{}')}}catch(x){S={...D}}
 const sv=()=>{try{localStorage.setItem('mana',JSON.stringify(S))}catch(x){}};
 let tab='ini',BK=null,CT='n',CHG=false,R=null,NE=null,P=null,IDX=null,tmr;
@@ -114,7 +117,7 @@ const td=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+
 const nz=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 function toast(m){const t=$('#tt');t.textContent=m;t.hidden=false;clearTimeout(tmr);tmr=setTimeout(()=>t.hidden=true,2200)}
 function theme(){const r=document.documentElement;S.theme==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',S.theme);r.style.setProperty('--fs',S.size+'px')}
-function days(n,L){L=L||CH;const T=L.reduce((s,b)=>s+B[b][1].reduce((a,c)=>a+c.length,0),0),t=T/n,out=[];let cum=0;for(const b of L)B[b][1].forEach((v,c)=>{const d=Math.min(n-1,Math.floor((cum+v.length/2)/t));(out[d]=out[d]||[]).push([b,c]);cum+=v.length});return out.filter(Boolean)}
+function days(n,L){if(L&&L.seq){const T=L.seq.reduce((s,x)=>s+B[x[0]][1][x[1]].length,0),t=T/n,out=[];let cum=0;L.seq.forEach(x=>{const l=B[x[0]][1][x[1]].length,d=Math.min(n-1,Math.floor((cum+l/2)/t));(out[d]=out[d]||[]).push([x[0],x[1]]);cum+=l});return out.filter(Boolean)}L=L||CH;const T=L.reduce((s,b)=>s+B[b][1].reduce((a,c)=>a+c.length,0),0),t=T/n,out=[];let cum=0;for(const b of L)B[b][1].forEach((v,c)=>{const d=Math.min(n-1,Math.floor((cum+v.length/2)/t));(out[d]=out[d]||[]).push([b,c]);cum+=v.length});return out.filter(Boolean)}
 function plan(){if(S.plan==null)return null;if(!P||P.k!==S.plan)P={k:S.plan,d:days(MO[S.plan][1],MO[S.plan][2])};return P.d}
 function rng(d){const g=[];d.forEach(([b,c])=>{const l=g[g.length-1];if(l&&l.b===b&&l.e===c-1)l.e=c;else g.push({b,s:c,e:c})});return g.map(x=>B[x.b][0]+' '+(x.s+1)+(x.e>x.s?'–'+(x.e+1):'')).join(', ')}
 function nextDay(){const p=plan();if(!p)return -1;for(let i=0;i<p.length;i++)if(!S.done.includes(i))return i;return -1}
@@ -141,11 +144,11 @@ function vIni(){
 function vBib(){
   if(BK!=null){const n=B[BK][1].length;let o='<button class="ref" data-a="bk" data-b="">← Livros</button><h1 style="margin-top:12px">'+e(B[BK][0])+'</h1><p class="mu">'+n+(n>1?' capítulos':' capítulo')+'</p>'+(INTRO[BK]?(S.intro?introHTML(BK):'<button class="btn o sm" data-a="bi" data-b="'+BK+'">Ver introdução do livro</button>'):'')+'<h2 id="caps">Capítulos</h2><div class="grid c">';for(let c=0;c<n;c++)o+='<button data-a="go" data-b="'+BK+'" data-c="'+c+'">'+(c+1)+'</button>';return o+'</div>'}
   const bt=(a,z)=>{let s='<div class="grid">';for(let i=a;i<z;i++)s+='<button data-a="bk" data-b="'+i+'">'+e(B[i][0])+'</button>';return s+'</div>'};
-  return '<h1>Minha Bíblia</h1><input id="q" type="search" placeholder="Buscar uma palavra ou expressão" data-in="q" aria-label="Buscar na Bíblia"><div id="sr"></div><h2>Antigo Testamento</h2>'+bt(0,39)+'<h2>Novo Testamento</h2>'+bt(39,66)}
+  return '<h1>Minha Bíblia</h1><input id="q" type="search" placeholder="Buscar uma palavra ou expressão" data-in="q" aria-label="Buscar na Bíblia"><div id="sr"></div><div class="seg"><button class="'+(BV==='l'?'on':'')+'" data-a="bv" data-t="l">Livros</button><button class="'+(BV==='t'?'on':'')+'" data-a="bv" data-t="t">Linha do tempo</button></div>'+(BV==='t'?tlHTML():'<h2>Antigo Testamento</h2>'+bt(0,39)+'<h2>Novo Testamento</h2>'+bt(39,66))}
 
 function vPla(){
   const p=plan();
-  if(!p||CHG){let o='<h1>Planos de leitura</h1><p class="mu">Bíblia em ordem cronológica aproximada, dividida em leituras diárias.'+(p?' Ao trocar, o progresso atual será reiniciado.':'')+'</p>';
+  if(!p||CHG){let o='<h1>Planos de leitura</h1><p class="mu">Escolha o ritmo de leitura. Os planos “por acontecimentos” seguem a ordem em que os fatos aconteceram.'+(p?' Ao trocar, o progresso atual será reiniciado.':'')+'</p>';
     MO.forEach((m,i)=>{const d=days(m[1],m[2]);o+='<div class="card"><h2 style="margin-top:0">'+m[0]+'</h2><p class="mu">'+d.length+' dias, cerca de '+(d.reduce((s,x)=>s+x.length,0)/d.length).toFixed(1).replace('.',',')+' capítulos por dia.</p><button class="btn" data-a="pl" data-i="'+i+'">Começar este plano</button></div>'});
     return o+(p?'<button class="btn o" data-a="cancel">Voltar ao plano atual</button>':'')}
   const nx=nextDay(),pc=S.done.length/p.length;
@@ -164,13 +167,13 @@ function vCad(){
 
 function vAju(){
   const T=[['auto','Automático'],['light','Claro'],['dark','Escuro']];
-  return '<h1>Configurações</h1><h2 style="margin-top:0">Aparência</h2><div class="seg">'+T.map(t=>'<button class="'+(S.theme===t[0]?'on':'')+'" data-a="th" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><label for="fs">Tamanho da letra</label><input id="fs" type="range" min="16" max="30" value="'+S.size+'" data-in="size"><div class="card" style="margin-top:12px"><p class="txt" style="padding:0;margin:0;font-size:var(--fs)">No princípio, Deus criou os céus e a terra.</p></div><h2>Lembrete diário</h2><div class="card"><div class="sw"><label for="rm" style="margin:0">Lembrar-me de ler</label><input id="rm" type="checkbox" data-in="rem"'+(S.rem?' checked':'')+'></div><label for="tm">Horário</label><input id="tm" type="time" value="'+e(S.time)+'" data-in="time"><p class="mu">O lembrete chega como notificação no horário escolhido. Pode atrasar alguns minutos, conforme a economia de bateria do celular.</p></div>'+hlSet()+'<h2>Sobre</h2><p class="mu">Texto bíblico: João Ferreira de Almeida, versão Atualizada (livre). Suas anotações e seu progresso ficam salvos neste aparelho.</p><button class="btn o sm" data-a="wipe">Apagar meus dados</button>'}
+  return '<h1>Configurações</h1><h2 style="margin-top:0">Aparência</h2><div class="seg">'+T.map(t=>'<button class="'+(S.theme===t[0]?'on':'')+'" data-a="th" data-t="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><label for="fs">Tamanho da letra</label><input id="fs" type="range" min="16" max="30" value="'+S.size+'" data-in="size"><div class="card" style="margin-top:12px"><p class="txt" style="padding:0;margin:0;font-size:var(--fs)">No princípio, Deus criou os céus e a terra.</p></div><h2>Lembrete diário</h2><div class="card"><div class="sw"><label for="rm" style="margin:0">Lembrar-me de ler</label><input id="rm" type="checkbox" data-in="rem"'+(S.rem?' checked':'')+'></div><label for="tm">Horário</label><input id="tm" type="time" value="'+e(S.time)+'" data-in="time"><p class="mu">O lembrete chega como notificação no horário escolhido. Pode atrasar alguns minutos, conforme a economia de bateria do celular.</p></div>'+hlSet()+'<h2>Sobre</h2><p class="mu">Maná v1.2. Texto bíblico: João Ferreira de Almeida, versão Atualizada (livre). Suas anotações e seu progresso ficam salvos neste aparelho.</p><button class="btn o sm" data-a="wipe">Apagar meus dados</button>'}
 
 const TABS=[['ini','Início',vIni],['bib','Bíblia',vBib],['pla','Planos',vPla],['cad','Caderno',vCad],['aju','Ajustes',vAju]];
 function view(){const t=TABS.find(x=>x[0]===tab);$('#main').innerHTML=t[2]();$('#nav').innerHTML=TABS.map(x=>'<button data-a="tab" data-t="'+x[0]+'"'+(x[0]===tab?' aria-current="page"':'')+'>'+x[1]+'</button>').join('')}
 function setTab(t){tab=t;if(t==='bib')BK=null;CHG=false;view();window.scrollTo(0,0)}
 
-const nx=(b,c,d)=>{let c2=c+d,b2=b;if(c2<0){b2--;if(b2<0)return null;c2=B[b2][1].length-1}else if(c2>=B[b][1].length){b2++;if(b2>=B.length)return null;c2=0}return[b2,c2]};
+const nx=(b,c,d)=>{if(S.ord==='c'){const q=(POS[b+':'+c]||0)+d;return q<0||q>=CHR.length?null:CHR[q]}let c2=c+d,b2=b;if(c2<0){b2--;if(b2<0)return null;c2=B[b2][1].length-1}else if(c2>=B[b][1].length){b2++;if(b2>=B.length)return null;c2=0}return[b2,c2]};
 function open(b,c,day,v){R={b,c,day,sel:null};S.last=[b,c];sv();rd();if(v!=null&&v!==''){sel(+v);const el=document.querySelector('.v[data-i="'+v+'"]');if(el)el.scrollIntoView({block:'center'})}}
 function rd(){const el=$('#rd');
   if(!R){el.hidden=true;document.body.style.overflow='';return}
@@ -178,7 +181,7 @@ function rd(){const el=$('#rd');
   el.hidden=false;document.body.style.overflow='hidden';
   let ft='';
   if(R.day!=null&&p){const dn=S.done.includes(R.day);ft='<p class="mu">Leitura do dia '+(R.day+1)+': '+e(rng(p[R.day]))+'</p><button class="btn'+(dn?' o':'')+'" data-a="dn">'+(dn?'Dia concluído (desfazer)':'Marcar dia '+(R.day+1)+' como concluído')+'</button>'}
-  el.innerHTML='<div class="rh"><button data-a="close" aria-label="Fechar leitura">←</button><button class="t" data-a="pick">'+e(nm)+' '+(R.c+1)+'</button><span class="sp"></span>'+(INTRO[R.b]?'<button data-a="intro" aria-label="Introdução do livro">ⓘ</button>':'')+'<button data-a="prev" aria-label="Capítulo anterior">‹</button><button data-a="next" aria-label="Próximo capítulo">›</button></div><div class="txt">'+(R.c===0&&INTRO[R.b]&&S.intro?'<div class="banner"><button class="ref" data-a="intro">Ler a introdução de '+e(nm)+'</button></div>':'')+vs.map((t,i)=>vh(R.b,R.c,i,t)).join('')+'<div class="row"><button class="btn o" data-a="prev">Anterior</button><button class="btn o" data-a="next">Próximo</button></div><div style="margin-top:18px;font-family:Figtree,sans-serif">'+ft+'</div></div><div id="bar" hidden></div>';
+  el.innerHTML='<div class="rh"><button data-a="close" aria-label="Fechar leitura">←</button><button class="t" data-a="pick">'+e(nm)+' '+(R.c+1)+'</button><span class="sp"></span>'+(INTRO[R.b]?'<button data-a="intro" aria-label="Introdução do livro">ⓘ</button>':'')+'<button data-a="prev" aria-label="Capítulo anterior">‹</button><button data-a="next" aria-label="Próximo capítulo">›</button></div><div class="txt">'+(R.c===0&&INTRO[R.b]&&S.intro?'<div class="banner"><button class="ref" data-a="intro">Ler a introdução de '+e(nm)+'</button></div>':'')+(S.ord==='c'?'<p class="mu">Lendo por ordem dos acontecimentos · <button class="ref" data-a="ordl">voltar à ordem dos livros</button></p>':'')+vs.map((t,i)=>vh(R.b,R.c,i,t)).join('')+'<div class="row"><button class="btn o" data-a="prev">Anterior</button><button class="btn o" data-a="next">Próximo</button></div><div style="margin-top:18px;font-family:Figtree,sans-serif">'+ft+'</div></div><div id="bar" hidden></div>';
   el.scrollTop=0}
 function sel(i){R.sel=R.sel===i?null:i;document.querySelectorAll('.v').forEach(x=>x.classList.toggle('on',+x.dataset.i===R.sel));const bar=$('#bar');
   if(R.sel==null){bar.hidden=true;return}
@@ -253,12 +256,19 @@ function introSheet(b){if(!INTRO[b])return;sheet('<h2 style="margin-top:0">'+e(B
 function hlSet(){
   const r=[['hj','Jesus','Falas e referências a Jesus'],['hp','Pai','Falas e referências a Deus Pai'],['he','Esp','Falas e referências ao Espírito Santo']];
   return '<h2>Leitura</h2><div class="card">'
-   +'<div class="sw"><label for="ii" style="margin:0">Mostrar a introdução ao abrir o livro</label><input id="ii" type="checkbox" data-in="intro"'+(S.intro?' checked':'')+'></div></div>'
+   +'<div class="sw"><label for="ii" style="margin:0">Mostrar a introdução ao abrir o livro</label><input id="ii" type="checkbox" data-in="intro"'+(S.intro?' checked':'')+'></div><div class="sw" style="margin-top:12px"><label for="od" style="margin:0">Ler por ordem dos acontecimentos</label><input id="od" type="checkbox" data-in="ord"'+(S.ord==='c'?' checked':'')+'></div><p class="mu">Os botões Anterior e Próximo seguem a linha do tempo da Bíblia.</p></div>'
    +'<h2>Destaques no texto</h2><div class="card">'
    +r.map(x=>'<div class="sw" style="margin-bottom:10px"><label for="'+x[0]+'" style="margin:0">'+x[2]+'</label><input id="'+x[0]+'" type="checkbox" data-in="'+x[0]+'"'+(S[x[0]]?' checked':'')+'></div>').join('')
    +'<div class="lg"><span><i style="background:var(--cj)"></i>Texto em vermelho: fala de Jesus</span><span><i style="background:var(--cp)"></i>Texto em dourado: fala de Deus Pai</span><span><i style="background:var(--ce)"></i>Texto em azul: fala do Espírito Santo</span>'
    +'<span><i class="l" style="border-color:var(--cj)"></i>Barra na lateral: o versículo se refere a Jesus</span><span><i class="l" style="border-color:var(--cp)"></i>Barra dourada: refere-se ao Pai</span><span><i class="l" style="border-color:var(--ce)"></i>Barra azul: refere-se ao Espírito Santo</span></div>'
    +'<p class="mu">As falas já marcadas cobrem as passagens principais e crescem a cada atualização. As barras laterais são detectadas pelos nomes no texto e podem incluir ou deixar passar algum versículo.</p></div>'}
+
+let BV='l';
+const sg=g=>B[g[0]][0]+' '+(g[1]+1)+(g[2]>g[1]?'–'+(g[2]+1):'');
+function tlHTML(){
+  return '<p class="mu">Os livros da Bíblia na ordem aproximada em que os fatos aconteceram. Ao tocar em uma passagem, os botões Anterior e Próximo passam a seguir esta ordem. Para voltar à ordem dos livros, use o link no topo da leitura ou os Ajustes. Algumas datas são debatidas entre estudiosos.</p>'
+   +ERAS.map(x=>'<div class="card"><h2 style="margin-top:0">'+e(x[0])+'</h2><p class="mu">'+e(x[1])+'</p><div class="tl">'
+     +x[2].map(g=>'<button class="ref" data-a="gt" data-b="'+g[0]+'" data-c="'+g[1]+'">'+e(sg(g))+'</button>').join('')+'</div></div>').join('')}
 const A={
   tab:d=>setTab(d.t),
   go:d=>open(+d.b,+d.c,null,d.v),
@@ -288,7 +298,7 @@ const A={
   vn:()=>noteSheet({ref:vref(),b:R.b,c:R.c,v:R.sel}),
   vs:()=>{const r=vref();if(!S.saved.some(s=>s.ref===r)){S.saved.push({ref:r,b:R.b,c:R.c,v:R.sel,text:vtxt()});sv()}toast('Versículo salvo no caderno')},
   vh:()=>share(vtxt(),vref()),vu:()=>studySheet(stu(R.b,R.c,R.sel)),
-  dn:()=>{toggle(R.day);rd()},intro:()=>introSheet(R.b),bi:d=>introSheet(+d.b),skip:()=>{const x=document.getElementById('caps');if(x)x.scrollIntoView({behavior:'smooth'})}
+  dn:()=>{toggle(R.day);rd()},intro:()=>introSheet(R.b),bv:d=>{BV=d.t;view()},gt:d=>{S.ord='c';sv();open(+d.b,+d.c,null,'')},ordl:()=>{S.ord='l';sv();rd()},bi:d=>introSheet(+d.b),skip:()=>{const x=document.getElementById('caps');if(x)x.scrollIntoView({behavior:'smooth'})}
 };
 document.addEventListener('click',ev=>{const t=ev.target.closest('[data-a]');if(t&&A[t.dataset.a])A[t.dataset.a](t.dataset,t)});
 $('#sh').addEventListener('click',ev=>{if(ev.target.id==='sh')sheet(null)});
@@ -297,7 +307,7 @@ try{Capacitor.Plugins.App.addListener('backButton',()=>{if(!$('#sh').hidden)shee
 const IN={q:v=>search(v),size:v=>{S.size=+v;sv();theme()},
   rem:(v,el)=>{S.rem=el.checked;sv();nat()},
   time:v=>{if(v){S.time=v;S.nd='';sv();nat()}},
-  hj:(v,el)=>{S.hj=el.checked;sv()},hp:(v,el)=>{S.hp=el.checked;sv()},he:(v,el)=>{S.he=el.checked;sv()},intro:(v,el)=>{S.intro=el.checked;sv()}};
+  hj:(v,el)=>{S.hj=el.checked;sv()},hp:(v,el)=>{S.hp=el.checked;sv()},he:(v,el)=>{S.he=el.checked;sv()},intro:(v,el)=>{S.intro=el.checked;sv()},ord:(v,el)=>{S.ord=el.checked?'c':'l';sv()}};
 ['input','change'].forEach(n=>document.addEventListener(n,ev=>{const k=ev.target.dataset&&ev.target.dataset.in;if(!k)return;if(k==='q'&&n==='change')return;IN[k](ev.target.value,ev.target)}));
 setInterval(()=>{if(!S.rem||S.nd===td()||!pending()||!due())return;S.nd=td();sv();try{if(Notification.permission==='granted')new Notification('Maná',{body:'Hora da sua leitura de hoje.'})}catch(x){}toast('Hora da sua leitura de hoje');if(tab==='ini'&&!R)view()},30000);
 theme();view();nat();
